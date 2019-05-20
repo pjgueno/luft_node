@@ -45,7 +45,16 @@ module.exports = {
 			},
 			{
 				test: /\.(png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot)$/,
+				include: /node_modules/,
 				use: ['file-loader']
+			},
+			{
+				test: /\.(jpe?g|png|gif|svg|ico|xml|webmanifest)$/i, 
+				loader: "file-loader?name=/favicons/[name].[ext]"
+			},
+			{
+				test: /\.(txt)$/i, 
+				loader: "file-loader?name=/[name].[ext]"
 			}
 		]
 	},
