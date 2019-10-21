@@ -14,6 +14,8 @@ import {interval, timeout} from 'd3-timer';
 import {timeFormatLocale, timeParse} from 'd3-time-format';
 import {median} from 'd3-array';
 
+import 'whatwg-fetch';
+
 const d3 = Object.assign({}, d3_Selection, d3_Hexbin);
 
 import api from './feinstaub-api';
@@ -28,7 +30,7 @@ import * as translate from './translate.js';
 import './static-files'
 
 // declare variables
-let hexagonheatmap, hmhexaPM_aktuell, hmhexaPM_AQI, hmhexa_t_h_p;
+let hexagonheatmap, hmhexaPM_aktuell, hmhexaPM_AQI, hmhexa_t_h_p, hmhexa_noise;
 
 // selected value from the dropdown
 let user_selected_value = config.selection;
@@ -74,7 +76,11 @@ const scale_options = {
 	"Pressure": {
 		valueDomain: [926, 947.75, 969.50, 991.25, 1013, 1034.75, 1056.50, 1078.25, 1100],
 		colorRange: ["#dd2e97", "#6b3b8f", "#2979b9", "#02B9ed", "#13ae52", "#c9d841", "#fad635", "#f0a03d", "#892725"]
-	}
+	},
+	"Noise": {
+		valueDomain: [0, 20, 40, 60, 80, 100],
+		colorRange: ['#00528f', '#6dbcff', '#aff474', '#f4e60b', '#f47a0b', '#c41a0a']
+	},
 };
 
 const titles = {
@@ -84,6 +90,7 @@ const titles = {
 	"Temperature": "Temperature °C",
 	"Humidity": "Humidity %",
 	"Pressure": "Pressure hPa",
+	"Noise": "Noise dBA",
 };
 
 const panelIDs = {
@@ -91,7 +98,8 @@ const panelIDs = {
 	"PM25": [2, 1],
 	"Temperature": [4, 3],
 	"Humidity": [6, 5],
-	"Pressure": [8, 7]
+	"Pressure": [8, 7],
+	"Noise": [0, 12]
 };
 
 const div = d3.select("#sidebar").append("div").attr("id", "table").style("display", "none");
@@ -104,25 +112,43 @@ const tiles = L.tileLayer(config.tiles, {
 	minZoom: config.minZoom
 }).addTo(map);
 
+var labelBaseOptions = {
+	iconUrl: 'images/lab_marker.svg',
+	shadowUrl: null,
+	iconSize: new L.Point(21, 35),
+	iconAnchor: new L.Point(10, 34),
+	labelAnchor: new L.Point(25, 2),
+	wrapperAnchor: new L.Point(10, 35),
+	popupAnchor:  [-0, -35]
+};
+
 new L.Hash(map);
 
 // define query object
 const query = {
-	no_overlay: "false"
+	nooverlay: "false",
+	selection: config.selection
 };
 // iife function to read query parameter and fill query object
 (function () {
 	let telem;
 	const search_values = location.search.replace('\?', '').split('&');
 	for (let i = 0; i < search_values.length; i++) {
+		console.log(search_values[i]);
 		telem = search_values[i].split('=');
+		console.log(telem);
 		query[telem[0]] = '';
 		if (typeof telem[1] != 'undefined') query[telem[0]] = telem[1];
 	}
 })();
 
 // show betterplace overlay
-if (query.no_overlay === "false") d3.select("#betterplace").style("display", "inline-block");
+if (query.nooverlay === "false") d3.select("#betterplace").style("display", "inline-block");
+
+config.selection = query.selection;
+d3.select("#custom-select").select("select").property("value", config.selection);
+user_selected_value = config.selection;
+
 
 let coordsCenter = config.center;
 let zoomLevel = config.zoom;
@@ -186,6 +212,7 @@ window.onload = function () {
 
 		// Make hex radius dynamic for different zoom levels to give a nicer overview of the sensors as well as making sure that the hex grid does not cover the whole world when zooming out
 		getFlexRadius() {
+			console.log(user_selected_value);
 			if (this.map.getZoom() < 3) {
 				return this.options.radius / (3 * (4 - this.map.getZoom()));
 			} else if (this.map.getZoom() > 2 && this.map.getZoom() < 8) {
@@ -400,12 +427,12 @@ The values are refreshed every 5 minutes in order to fit with the measurement fr
 
 	//	Select
 	const custom_select = d3.select("#custom-select");
-	custom_select.select("select").selectAll("option").each(function () {
-		d3.select(this).text(translate.tr(lang, d3.select(this).text()));
-	});
 	custom_select.select("select").property("value", config.selection);
-	custom_select.append("div").attr("class", "select-selected").html(translate.tr(lang,
-		custom_select.select("select").select("option:checked").text())).on("click", showAllSelect);
+	custom_select.select("select").selectAll("option").each(function () {
+		d3.select(this).html(translate.tr(lang, d3.select(this).html()));
+	});
+	custom_select.append("div").attr("class", "select-selected").html("<span>"+translate.tr(lang,
+		custom_select.select("select").select("option:checked").html())+"</span>").on("click", showAllSelect);
 	custom_select.style("display", "inline-block");
 
 	switchLegend(user_selected_value);
@@ -429,6 +456,11 @@ The values are refreshed every 5 minutes in order to fit with the measurement fr
 				hmhexa_t_h_p = result.cells;
 				if (result.timestamp > timestamp_data) timestamp_data = result.timestamp;
 				ready(3);
+			});
+			api.getData("https://maps.luftdaten.info/data/v1/data.noise.json", 4).then(function (result) {
+				hmhexa_noise = result.cells;
+				if (result.timestamp > timestamp_data) timestamp_data = result.timestamp;
+				ready(4);
 			});
 		});
 	}
@@ -454,6 +486,7 @@ The values are refreshed every 5 minutes in order to fit with the measurement fr
 		/* if the user clicks anywhere outside the opened select drop down, then close all select boxes */
 		if (! d3.select("#custom-select").select(".select-items").empty()) {
 			d3.select("#custom-select").select(".select-items").remove();
+			d3.select("#custom-select").select(".select-selected").attr("class", "select-selected");
 		} else {
 			map.clicked = map.clicked + 1;
 			timeout(function () {
@@ -468,11 +501,54 @@ The values are refreshed every 5 minutes in order to fit with the measurement fr
 		map.clicked = 0;
 		map.zoomIn();
 	});
-};
+	
+	function checkStatus(response) {
+		if (response.status >= 200 && response.status < 300) {
+			return response
+		} else {
+			var error = new Error(response.statusText)
+			error.response = response
+			throw error
+		}
+	}
+ 
+	function parseJSON(response) {
+		return response.json()
+	}
+ 
+    var labelRight = L.Icon.extend({
+        options: labelBaseOptions
+    });
+
+	fetch("https://opendata-stuttgart.github.io/luftdaten-local-labs/labs.json")
+	.then(checkStatus)
+	.then(parseJSON)
+	.then(function(data) {
+		for (var i = 0; i < data.length; i++) {
+			var marker = L.marker(
+					[data[i].lat,data[i].lon],
+					{
+						icon: new labelRight({ labelText: "<a href=\"#\"></a>"}),
+						riseOnHover: true
+					}
+				)
+				.bindPopup(data[i].text + "<br /><br />Your location is missing? Add it <a href='https://github.com/opendata-stuttgart/luftdaten-local-labs' target='_blank' rel='noreferrer'>here</a>.")
+				.addTo(map)
+		}
+	}).catch(function(error) {
+			console.log('request failed', error)
+	})
+}
 
 function data_median(data) {
-	var d_temp = data.filter(d => !d.o.indoor);
-	return median(d_temp, (o) => o.o.data[user_selected_value]);
+	function sort_num(a,b) {
+		var c = a - b;
+		return (c < 0 ? -1 : (c = 0 ? 0 : 1));
+	}
+	var d_temp = data.filter(d => !d.o.indoor)
+					.map(o => o.o.data[user_selected_value])
+					.sort(sort_num);
+	return median(d_temp);
 }
 
 function switchLegend(val) {
@@ -535,6 +611,10 @@ function ready(num) {
 			return api.checkValues(value.data[user_selected_value], user_selected_value);
 		}));
 	}
+	if (num === 4 && user_selected_value === "Noise") {
+		hexagonheatmap.initialize(scale_options[user_selected_value]);
+		hexagonheatmap.data(hmhexa_noise);
+	}
 	d3.select("#loading").style("display", "none");
 }
 
@@ -553,6 +633,8 @@ function reloadMap(val) {
 		hexagonheatmap.data(hmhexa_t_h_p.filter(function (value) {
 			return api.checkValues(value.data[user_selected_value], user_selected_value);
 		}));
+	} else if (val === "Noise") {
+		hexagonheatmap.data(hmhexa_noise);
 	}
 }
 
@@ -589,6 +671,9 @@ function sensorNr(data) {
 		if (user_selected_value === "Pressure") {
 			sensors += "<td>" + i.o.data[user_selected_value].toFixed(1) + "</td></tr>";
 		}
+		if (user_selected_value === "Noise") {
+			sensors += "<td>" + i.o.data[user_selected_value] + "</td></tr>";
+		}
 		sensors += "<tr id='graph_" + i.o.id + "'></tr>";
 	});
 	textefin += sensors;
@@ -618,7 +703,7 @@ function displayGraph(id) {
 		d3.select(iddiv).append("td")
 			.attr("id", "frame_" + sens)
 			.attr("colspan", "2")
-			.html(panel_str.replace("<PANELID>", panelIDs[user_selected_value][0]).replace("<SENSOR>", sens) + "<br>" + panel_str.replace("<PANELID>", panelIDs[user_selected_value][1]).replace("<SENSOR>", sens));
+			.html((panelIDs[user_selected_value][0] > 0 ? panel_str.replace("<PANELID>", panelIDs[user_selected_value][0]).replace("<SENSOR>", sens) + "<br/>":"") + (panelIDs[user_selected_value][1] > 0 ? panel_str.replace("<PANELID>", panelIDs[user_selected_value][1]).replace("<SENSOR>", sens):""));
 
 		if (user_selected_value !== "Official_AQI_US") inner_pre = "(-) ";
 		d3.select("#id_" + sens).html(inner_pre + "#" + sens);
@@ -645,10 +730,12 @@ function showAllSelect() {
 	const custom_select = d3.select("#custom-select");
 	if (custom_select.select(".select-items").empty()) {
 		custom_select.append("div").attr("class", "select-items");
-		custom_select.select("select").selectAll("option").each(function () {
-			if (this.value !== user_selected_value) custom_select.select(".select-items").append("div").text(this.text).attr("id", "select-item-" + this.value).on("click", function () {
+		custom_select.select("select").selectAll("option").each(function (d) {
+			console.log(d3.select(this).html());
+			if (this.value !== user_selected_value) custom_select.select(".select-items").append("div").html("<span>"+d3.select(this).html()+"</span>").attr("id", "select-item-" + this.value).on("click", function () {
 				switchTo(this);
 			});
+			custom_select.select("#select-item-Noise").select("span").attr("id","noise_option");
 		});
 		custom_select.select(".select-selected").attr("class", "select-selected select-arrow-active");
 	}
@@ -657,8 +744,14 @@ function showAllSelect() {
 function switchTo(element) {
 	const custom_select = d3.select("#custom-select");
 	custom_select.select("select").property("value", element.id.substring(12));
-	custom_select.select(".select-selected").text(custom_select.select("select").select("option:checked").text());
+	custom_select.select(".select-selected").html("<span>"+custom_select.select("select").select("option:checked").html()+"</span>");
 	user_selected_value = element.id.substring(12);
+	if (user_selected_value == "Noise") {
+		custom_select.select(".select-selected").select("span").attr("id","noise_option");
+	} else {
+		custom_select.select(".select-selected").select("span").attr("id",null);
+	}
+	custom_select.select(".select-selected").attr("class", "select-selected");
 	reloadMap(user_selected_value);
 	custom_select.select(".select-items").remove();
 }
