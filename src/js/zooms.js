@@ -72,8 +72,8 @@ module.exports = {
     "ireland": 7,
 
 //	Italy
-    "italy": 6,
-    "sicily": 8,
+    "italia": 6,
+    "sicilia": 8,
 
 //	Kosovo
     "kosovo": 8,
