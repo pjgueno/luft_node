@@ -62,3 +62,19 @@ You can find the iso-code on [wikipedia table (639-1)](https://en.wikipedia.org/
 ```
 
 ⚠ Don't forget to add the comma in the previous _key - value pair_ else syntax is broken.
+
+## URL-Parameter
+
+### Sensor 
+valid sensor parameters PM25, PM10, Pressure, Noise, Humidity & Official_AQI_US 
+http://127.0.0.1:8080/?sensor=Noise
+
+### Location 
+
+valid parameters zoom level, lat and long 
+http://127.0.0.1:8080/#9/48.8123/9.2487
+
+### combine parameters
+
+first start with sensor then location
+http://127.0.0.1:8080/?sensor=Noise#9/48.8123/9.2487
