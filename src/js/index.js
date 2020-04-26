@@ -402,7 +402,7 @@ window.onload = function () {
 <p>By clicking on the plus symbol next to a sensor ID, you can display two graphics: the individual measurements for the last 24 hours and the 24 hours floating mean for the last seven days. For technical reasons, the first of the 8 days displayed on the graphic has to stay empty.\
 The values are refreshed every 5 minutes in order to fit with the measurement frequency of the Airrohr sensors.</p> \
 <p>The Air Quality Index (AQI) is calculated according to the recommandations of the United States Environmental Protection Agency. Further information is available on the official page.(<a href='https://www.airnow.gov/index.cfm?action=aqibasics.aqi'>Link</a>). Hover over the AQI scale to display the levels of health concern.</p>"));
-	d3.select('#betterplace').html("<a title='" + translate.tr(lang, "Donate for Luftdaten.info (Hardware, Software) now on Betterplace.org") + " href='https://www.betterplace.org/de/projects/38071-fur-den-feinstaub-sensor-sds011-als-bastel-kit-spenden/' target='_blank' rel='noreferrer'>" + translate.tr(lang, "Donate for<br/>Luftdaten.info<br/>now on<br/><span>Betterplace.org</span>") + "</a>");
+	d3.select('#betterplace').html("<a title='" + translate.tr(lang, "Donate for Sensor.Community (Hardware, Software) now on Betterplace.org") + " href='https://www.betterplace.org/de/projects/38071-fur-den-feinstaub-sensor-sds011-als-bastel-kit-spenden/' target='_blank' rel='noreferrer'>" + translate.tr(lang, "Donate for<br/>Sensor.Community<br/>now on<br/><span>Betterplace.org</span>") + "</a>");
 
 	d3.select("#menu").on("click", toggleSidebar);
 	d3.select("#explanation").on("click", toggleExplanation);
@@ -650,7 +650,7 @@ function sensorNr(data) {
 function displayGraph(id) {
 
 	let inner_pre = "";
-	const panel_str = "<iframe src='https://maps.luftdaten.info/grafana/d-solo/000000004/single-sensor-view?orgId=1&panelId=<PANELID>&var-node=<SENSOR>' width='290' height='200' frameborder='0'></iframe>";
+	const panel_str = "<iframe src='https://maps.sensor.community/grafana/d-solo/000000004/single-sensor-view?orgId=1&panelId=<PANELID>&var-node=<SENSOR>' width='290' height='200' frameborder='0'></iframe>";
 	const sens = id.substr(3);
 	const sens_id = sens.replace("_indoor", "");
 	const sens_desc = sens.replace("_indoor", " (indoor)");
