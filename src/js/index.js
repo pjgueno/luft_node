@@ -176,6 +176,8 @@ window.onload = function () {
 			duration: 200,
 			onmouseover: undefined,
 			onmouseout: undefined,
+			
+			attribution: "<br/><span style='font-size:120%'>Measurements: <a href='https://sensor.community/' style='color: red'>Sensor.Community</a> contributors</span>",
 
 			/*	REVOIR LE DOUBLECLIQUE*/
 			click: function (e) {
