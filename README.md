@@ -43,7 +43,7 @@ npm run ghpages
 
 The translation file can be found in `src/js/translation.js`. 
 
-To add a new translated word, add below the key (see below) a new _key-value pair_. 
+To add a new translated word or sentence, add below the key (see below) a new _key-value pair_. 
 The nested key should start with the iso-code of the language followed by the translated world.
 You can find the iso-code on [wikipedia table (639-1)](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes).
 
@@ -62,6 +62,9 @@ You can find the iso-code on [wikipedia table (639-1)](https://en.wikipedia.org/
 ```
 
 ⚠ Don't forget to add the comma in the previous _key - value pair_ else syntax is broken.
+
+If you don't have a Github account download the file `src/js/translation.js` via the `Raw` button directly right
+over the source code. Send us your file with the translation to "tech (at) sensor.community".
 
 ## URL-Parameter
 
