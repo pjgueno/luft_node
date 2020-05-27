@@ -3,8 +3,8 @@ module.exports = {
 	"zoom" : 2,
 	"minZoom": 2,
 	"maxZoom": 16,
-	// phenomenon shown at start, possible values: PM10, PM25, Official_AQI_US, Temperature, Humidity, Pressure
-	"selection": "PM10",
+	// phenomenon shown at start, possible values: PM10, PM25, Official_AQI_US, Temperature, Humidity, Pressure, Noise
+	"selection": "PM25",
 	// Tiles
 	"tiles": "https://{s}.maps.sensor.community/tiles/{z}/{x}/{y}.png",
 	"tiles_path": "/{z}/{x}/{y}.png",
