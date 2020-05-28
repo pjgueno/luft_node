@@ -44,7 +44,7 @@ module.exports = {
 	" rel. Humidity": {
 		"de": " rel. Luftfeuchte",
 		"bg": "пр. Влажност",
-		"ru": "отн. Влажность",
+		"ru": "Влажность",
 		"fr": " Humidité rel."
 	},
 	" Pressure": {
