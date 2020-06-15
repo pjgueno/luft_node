@@ -137,7 +137,8 @@ const query = {
 
 // show betterplace overlay
 if (query.nooverlay === "false") d3.select("#betterplace").style("display", "inline-block");
-
+console.log(translate.tr(lang,d3.select("#loading").html()));
+d3.select("#loading").html(translate.tr(lang,d3.select("#loading").html()));
 config.selection = (query.sensor !== undefined) ? query.sensor : config.selection;
 d3.select("#custom-select").select("select").property("value", config.selection);
 
@@ -403,7 +404,7 @@ window.onload = function () {
 <p>By clicking on a hexagon, you can display a list of all the corresponding sensors as a table. The first column lists the sensor-IDs. In the first line, you can see the amount of sensor in the area and the median value.</p> \
 <p>By clicking on the plus symbol next to a sensor ID, you can display two graphics: the individual measurements for the last 24 hours and the 24 hours floating mean for the last seven days. For technical reasons, the first of the 8 days displayed on the graphic has to stay empty.\
 The values are refreshed every 5 minutes in order to fit with the measurement frequency of the Airrohr sensors.</p> \
-<p>The Air Quality Index (AQI) is calculated according to the recommandations of the United States Environmental Protection Agency. Further information is available on the official page.(<a href='https://www.airnow.gov/index.cfm?action=aqibasics.aqi'>Link</a>). Hover over the AQI scale to display the levels of health concern.</p>"));
+<p>The Air Quality Index (AQI) is calculated according to the recommandations of the United States Environmental Protection Agency. Further information is available on the official page.(<a href='https://www.airnow.gov/aqi/aqi-basics/'>Link</a>). Hover over the AQI scale to display the levels of health concern.</p>"));
 	d3.select('#betterplace').html("<a title='" + translate.tr(lang, "Donate for Sensor.Community (Hardware, Software) now on Betterplace.org") + " href='https://www.betterplace.org/de/projects/38071-fur-den-feinstaub-sensor-sds011-als-bastel-kit-spenden/' target='_blank' rel='noreferrer'>" + translate.tr(lang, "Donate for<br/>Sensor.Community<br/>now on<br/><span>Betterplace.org</span>") + "</a>");
 
 	d3.select("#menu").on("click", toggleSidebar);
@@ -575,7 +576,7 @@ function ready(num) {
 		hexagonheatmap.initialize(scale_options[user_selected_value]);
 		hexagonheatmap.data(hmhexa_noise);
 	}
-	d3.select("#loading").style("display", "none");
+	d3.select("#loading_layer").style("display", "none");
 }
 
 function reloadMap(val) {
