@@ -1,7 +1,8 @@
 module.exports = {
 // main page
 	"Loading data...": {
-		"de": "Daten werden geladen ..."
+		"de": "Daten werden geladen ...",
+		"ru": "Данные загружаются..."
 	},
 // table headings
 	"(Sensor)": {
@@ -40,7 +41,8 @@ module.exports = {
 
 // select options
 	" Official AQI US": {
-		"de": "Luftqualitäts-Index (US)"
+		"de": "Luftqualitäts-Index (US)",
+		"ru": "Шкала AQI (США)"
 	},
 	" Temperature": {
 		"de": " Temperatur",
