@@ -295,6 +295,7 @@ module.exports = {
 	"strasbourg": [48.5836, 7.74806],
 	"grenoble": [45.2002, 5.7222],
 	"rennes": [48.107, -1.659],
+	"valenciennes": [50.3766, 3.5079],
 
 //	Greece
 	"greece": [39, 22],

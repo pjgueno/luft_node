@@ -20,6 +20,7 @@ const d3 = Object.assign({}, d3_Selection, d3_Hexbin);
 
 import api from './feinstaub-api';
 import labs from './labs.js';
+import wind from './wind.js';
 import * as config from './config.js';
 
 import '../css/style.css';
@@ -180,10 +181,9 @@ window.onload = function () {
 			
 			attribution: "<br/><span style='font-size:120%'>Measurements: <a href='https://sensor.community/' style='color: red'>Sensor.Community</a> contributors</span>",
 
-			/*	REVOIR LE DOUBLECLIQUE*/
-			click: function (e) {
+			click: function (d) {
 				timeout(function () {
-					if (map.clicked === 1) sensorNr(e);
+					if (map.clicked === 1) sensorNr(d);
 				}, 300);
 			},
 
@@ -393,6 +393,8 @@ window.onload = function () {
 		}
 	});
 
+	/*	REVOIR LE DOUBLECLIQUE*/
+
 	L.hexbinLayer = function (options) {
 		return new L.HexbinLayer(options);
 	};
@@ -496,10 +498,48 @@ The values are refreshed every 5 minutes in order to fit with the measurement fr
 		map.clicked = 0;
 		map.zoomIn();
 	});
+
+	// Load lab and windlayer, init checkboxes
+	if (config.layer_labs) {
+		d3.select("#cb_labs").property("checked", true);
+	} else {
+		d3.select("#cb_labs").property("checked", false);
+	}
 	
+	if (config.layer_wind) {
+		d3.select("#cb_wind").property("checked", true);
+	} else {
+		d3.select("#cb_wind").property("checked", false);
+	}
+
 	labs.getData(data_host + "/local-labs/labs.json", map);
+	wind.getData(data_host + "/data/v1/wind.json", map);
+	
+	d3.select("#label_local_labs").html(translate.tr(lang, "Local labs"));
+	d3.select("#label_wind_layer").html(translate.tr(lang, "Wind layer"));
+
+	switchLabLayer();
+	switchWindLayer();
+	d3.select("#cb_labs").on("change", switchLabLayer);
+	d3.select("#cb_wind").on("change", switchWindLayer);
 
 } 
+
+function switchLabLayer() {
+	if (d3.select("#cb_labs").property("checked")) {
+		map.getPane('markerPane').style.visibility = "visible";
+	} else {
+		map.getPane('markerPane').style.visibility = "hidden";
+	}
+}
+
+function switchWindLayer() {
+	if (d3.select("#cb_wind").property("checked")) {
+		d3.selectAll(".velocity-overlay").style("visibility", "visible");
+	} else {
+		d3.selectAll(".velocity-overlay").style("visibility", "hidden");
+	}
+}
 
 function data_median(data) {
 	function sort_num(a,b) {
@@ -604,6 +644,8 @@ function sensorNr(data) {
 	if (user_selected_value !== "Official_AQI_US") {
 		inner_pre = "(+) #";
 	}
+
+	console.log(data);
 
 	openSidebar();
 

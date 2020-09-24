@@ -69,6 +69,14 @@ module.exports = {
 		"fr": " Niveau sonore"
 	},
 
+// layer options
+	"Local labs": {
+		de: "Lokale Labs"
+	},
+	"Wind layer": {
+		de: "Wind Layer"
+	},
+
 // sidebar
 	"Hide explanation": {
 		"de": "Erklärung ausblenden",

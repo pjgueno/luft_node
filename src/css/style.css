@@ -80,14 +80,14 @@ body {
     color: black;
     font-weight: bold;
     font-size: 1.1rem;
-    width: 10em;
+    width: 14em;
     height: 2.2rem;
     display: inline-block;
     background-color: rgba(56, 181, 173, 0.8);
     border-radius: 8px;
     border: 1px solid transparent;
     position: absolute;
-    bottom: 1rem;
+    bottom: 4rem;
     margin-left: 1rem;
     pointer-events: auto;
 }
@@ -143,6 +143,25 @@ body {
 
 .select-items div:hover, .same-as-selected {
     border-radius: 8px;
+    background-color: rgb(49, 135, 127);
+}
+
+.layer-select {
+    color: white;
+    font-weight: bold;
+    font-size: 1.1rem;
+    width: 14em;
+    display: inline-block;
+    background-color: rgba(56, 181, 173, 0.8);
+    border-radius: 8px;
+    border: 1px solid transparent;
+    position: absolute;
+    bottom: 0.5rem;
+    margin-left: 1rem;
+    pointer-events: auto;
+}
+
+.layer-select:hover, .layer-select:focus {
     background-color: rgb(49, 135, 127);
 }
 
@@ -474,4 +493,8 @@ tr {
 	text-align: left;
 	vertical-align: middle;
 	border: none;
+}
+
+.leaflet-control-velocity {
+	display: none;
 }
