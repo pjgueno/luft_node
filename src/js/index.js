@@ -183,7 +183,9 @@ window.onload = function () {
 
 			click: function (d) {
 				timeout(function () {
-					if (map.clicked === 1) sensorNr(d);
+					if (map.clicked === 1) {
+						sensorNr(d);
+					}
 				}, 300);
 			},
 
@@ -644,8 +646,6 @@ function sensorNr(data) {
 	if (user_selected_value !== "Official_AQI_US") {
 		inner_pre = "(+) #";
 	}
-
-	console.log(data);
 
 	openSidebar();
 
