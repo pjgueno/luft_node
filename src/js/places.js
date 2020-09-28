@@ -417,6 +417,7 @@ module.exports = {
 	"bristol": [51.45, -2.5833],
 	"eastbourne": [50.8, 0.34],
 	"london": [51.5072, -0.1275],
+	"calne": [51.44,-2.0],
 
 //	---- Africa ----
 

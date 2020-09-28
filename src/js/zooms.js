@@ -142,6 +142,7 @@ module.exports = {
 //	United Kingdom
 	"united-kingdom": 5,
 	"london": 10,
+	"calne": 14,
 
 //	---- Africa ----
 
