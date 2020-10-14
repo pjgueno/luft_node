@@ -10,7 +10,6 @@ import * as d3_Transition from "d3-transition";
 import {scaleLinear} from 'd3-scale';
 import {geoPath, geoTransform} from 'd3-geo';
 import {timeMinute} from 'd3-time';
-import {interval, timeout} from 'd3-timer';
 import {timeFormatLocale, timeParse} from 'd3-time-format';
 import {median} from 'd3-array';
 
@@ -39,6 +38,7 @@ const lang = translate.getFirstBrowserLanguage().substring(0, 2);
 
 let openedGraph1 = [];
 let timestamp_data = '';			// needs to be global to work over all 3 data streams
+let clicked = null;
 
 const locale = timeFormatLocale({
 	"dateTime": "%Y.%m.%d %H:%M:%S",
@@ -128,9 +128,7 @@ const query = {
 	let telem;
 	const search_values = location.search.replace('\?', '').split('&');
 	for (let i = 0; i < search_values.length; i++) {
-		console.log(search_values[i]);
 		telem = search_values[i].split('=');
-		console.log(telem);
 		query[telem[0]] = '';
 		if (typeof telem[1] != 'undefined') query[telem[0]] = telem[1];
 	}
@@ -138,7 +136,6 @@ const query = {
 
 // show betterplace overlay
 if (query.nooverlay === "false") d3.select("#betterplace").style("display", "inline-block");
-console.log(translate.tr(lang,d3.select("#loading").html()));
 d3.select("#loading").html(translate.tr(lang,d3.select("#loading").html()));
 config.selection = (query.sensor !== undefined) ? query.sensor : config.selection;
 d3.select("#custom-select").select("select").property("value", config.selection);
@@ -155,19 +152,15 @@ if (location.hash) {
 	const hostname_parts = location.hostname.split(".");
 	if (hostname_parts.length === 4) {
 		const place = hostname_parts[0].toLowerCase();
-		console.log(place);
 		if (typeof places[place] !== 'undefined' && places[place] !== null) {
 			coordsCenter = places[place];
 			zoomLevel = 11;
 		}
 		if (typeof zooms[place] !== 'undefined' && zooms[place] !== null) zoomLevel = zooms[place];
-		console.log("Center: " + coordsCenter);
-		console.log("Zoom: " + zoomLevel);
 	}
 }
 
 window.onload = function () {
-	//	HEXBINS
 	L.HexbinLayer = L.Layer.extend({
 		_undef(a) {
 			return typeof a === 'undefined';
@@ -182,11 +175,10 @@ window.onload = function () {
 			attribution: "<br/><span style='font-size:120%'>Measurements: <a href='https://sensor.community/' style='color: red'>Sensor.Community</a> contributors</span>",
 
 			click: function (d) {
-				timeout(function () {
-					if (map.clicked === 1) {
-						sensorNr(d);
-					}
-				}, 300);
+				setTimeout(function () {
+					if (clicked === null) sensorNr(d);
+					clicked += 1;
+				}, 500)
 			},
 
 			lng: function (d) {
@@ -209,7 +201,6 @@ window.onload = function () {
 
 		// Make hex radius dynamic for different zoom levels to give a nicer overview of the sensors as well as making sure that the hex grid does not cover the whole world when zooming out
 		getFlexRadius() {
-			console.log(user_selected_value);
 			if (this.map.getZoom() < 3) {
 				return this.options.radius / (3 * (4 - this.map.getZoom()));
 			} else if (this.map.getZoom() > 2 && this.map.getZoom() < 8) {
@@ -395,8 +386,6 @@ window.onload = function () {
 		}
 	});
 
-	/*	REVOIR LE DOUBLECLIQUE*/
-
 	L.hexbinLayer = function (options) {
 		return new L.HexbinLayer(options);
 	};
@@ -468,7 +457,7 @@ The values are refreshed every 5 minutes in order to fit with the measurement fr
 	retrieveData();
 
 	// refresh data
-	interval(function () {
+	setInterval(function () {
 		d3.selectAll('path.hexbin-hexagon').remove();
 		retrieveData();
 	}, 300000);
@@ -476,10 +465,6 @@ The values are refreshed every 5 minutes in order to fit with the measurement fr
 	map.on('moveend', function () {
 		hexagonheatmap._zoomChange();
 	});
-	map.on('move', function () {
-	});
-
-//	REVOIR LE DOUBLECLIQUE
 
 	map.on('click', function (e) {
 		/* if the user clicks anywhere outside the opened select drop down, then close all select boxes */
@@ -487,18 +472,15 @@ The values are refreshed every 5 minutes in order to fit with the measurement fr
 			d3.select("#custom-select").select(".select-items").remove();
 			d3.select("#custom-select").select(".select-selected").attr("class", "select-selected");
 		} else {
-			map.clicked = map.clicked + 1;
-			timeout(function () {
-				if (map.clicked === 1) {
-					map.setView([e.latlng.lat, e.latlng.lng], map.getZoom());
-				}
-				map.clicked = 0;
+			setTimeout(function () {
+				map.setView([e.latlng.lat, e.latlng.lng], map.getZoom());
 			}, 300);
 		}
+		clicked = null;
 	});
 	map.on('dblclick', function () {
-		map.clicked = 0;
 		map.zoomIn();
+		clicked += 1;
 	});
 
 	// Load lab and windlayer, init checkboxes
@@ -736,7 +718,6 @@ function showAllSelect() {
 	if (custom_select.select(".select-items").empty()) {
 		custom_select.append("div").attr("class", "select-items");
 		custom_select.select("select").selectAll("option").each(function (d) {
-			console.log(d3.select(this).html());
 			if (this.value !== user_selected_value) custom_select.select(".select-items").append("div").html("<span>"+d3.select(this).html()+"</span>").attr("id", "select-item-" + this.value).on("click", function () {
 				switchTo(this);
 			});
@@ -751,7 +732,7 @@ function switchTo(element) {
 	custom_select.select("select").property("value", element.id.substring(12));
 	custom_select.select(".select-selected").html("<span>"+custom_select.select("select").select("option:checked").html()+"</span>");
 	user_selected_value = element.id.substring(12);
-	if (user_selected_value == "Noise") {
+	if (user_selected_value === "Noise") {
 		custom_select.select(".select-selected").select("span").attr("id","noise_option");
 	} else {
 		custom_select.select(".select-selected").select("span").attr("id",null);
