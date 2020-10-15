@@ -121,6 +121,8 @@ new L.Hash(map);
 // define query object
 const query = {
 	nooverlay: "false",
+	nowind: "false",
+	nolabs: "false",
 	selection: config.selection
 };
 // iife function to read query parameter and fill query object
@@ -133,6 +135,10 @@ const query = {
 		if (typeof telem[1] != 'undefined') query[telem[0]] = telem[1];
 	}
 })();
+
+// wind layer
+if (query.nowind === "false") { config.layer_wind = 1 } else {config.layer_wind = 0;}
+if (query.nolabs === "false") { config.layer_labs = 1 } else {config.layer_labs = 0;}
 
 // show betterplace overlay
 if (query.nooverlay === "false") d3.select("#betterplace").style("display", "inline-block");
@@ -497,7 +503,7 @@ The values are refreshed every 5 minutes in order to fit with the measurement fr
 	}
 
 	labs.getData(data_host + "/local-labs/labs.json", map);
-	wind.getData(data_host + "/data/v1/wind.json", map);
+	wind.getData(data_host + "/data/v1/wind.json", map, switchWindLayer);
 	
 	d3.select("#label_local_labs").html(translate.tr(lang, "Local labs"));
 	d3.select("#label_wind_layer").html(translate.tr(lang, "Wind layer"));
@@ -509,12 +515,25 @@ The values are refreshed every 5 minutes in order to fit with the measurement fr
 
 } 
 
+function setQueryString() {
+	let stateObj = {};
+	let new_path = window.location.pathname + "?";
+	if (query.nooverlay != "false") new_path += "nooverlay&";
+	if (query.selection != config.selection) new_path += "selection="+query.selection+"&";
+	if (! d3.select("#cb_wind").property("checked")) new_path += "nowind&";
+	if (! d3.select("#cb_labs").property("checked")) new_path += "nolabs&";
+	new_path = new_path.slice(0,-1) + location.hash;
+	console.log(new_path);
+	history.pushState(stateObj,document.title,new_path);
+}
+
 function switchLabLayer() {
 	if (d3.select("#cb_labs").property("checked")) {
 		map.getPane('markerPane').style.visibility = "visible";
 	} else {
 		map.getPane('markerPane').style.visibility = "hidden";
 	}
+	setQueryString();
 }
 
 function switchWindLayer() {
@@ -523,6 +542,7 @@ function switchWindLayer() {
 	} else {
 		d3.selectAll(".velocity-overlay").style("visibility", "hidden");
 	}
+	setQueryString();
 }
 
 function data_median(data) {

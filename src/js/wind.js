@@ -3,7 +3,7 @@ import 'leaflet-velocity'
 
 let wind = {
 
-	getData: async function (URL, map) {
+	getData: async function (URL, map, switchLayer) {
 
 		function checkStatus(response) {
 			if (response.status >= 200 && response.status < 300) {
@@ -34,6 +34,7 @@ let wind = {
 							minVelocity: 0,
 							maxVelocity: 10,
 							overlayName: 'wind_layer',
+							onAdd: switchLayer,
 				})
 				.addTo(map);
 
