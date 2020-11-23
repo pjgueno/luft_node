@@ -133,6 +133,7 @@ let api = {
 			.then((json) => {
 				console.log('successful retrieved data');
 				let timestamp_data = '';
+				let timestamp_from = '';
 				if (num === 1) {
 					let cells = _.chain(json)
 						.filter((sensor) =>
@@ -142,7 +143,10 @@ let api = {
 							&& api.checkValues(parseInt(getRightValue(sensor.sensordatavalues, "P2")), "PM25")
 						)
 						.map((values) => {
-							if (values.timestamp > timestamp_data) timestamp_data = values.timestamp;
+							if (values.timestamp > timestamp_data) {
+								timestamp_data = values.timestamp;
+								timestamp_from = "data.dust.min";
+							}
 							return {
 								data: {
 									PM10: parseInt(getRightValue(values.sensordatavalues, "P1")),
@@ -155,7 +159,7 @@ let api = {
 							}
 						})
 						.value();
-					return Promise.resolve({cells: cells, timestamp: timestamp_data});
+					return Promise.resolve({cells: cells, timestamp: timestamp_data, timestamp_from: timestamp_from});
 				} else if (num === 2) {
 					let cells = _.chain(json)
 						.filter((sensor) =>
@@ -163,7 +167,10 @@ let api = {
 							&& api.pm_sensors[sensor.sensor.sensor_type.name]
 						)
 						.map((values) => {
-							if (values.timestamp > timestamp_data) timestamp_data = values.timestamp;
+							if (values.timestamp > timestamp_data) {
+								timestamp_data = values.timestamp;
+								timestamp_from = "data.24h"
+							}
 							const data_in = {
 								"PM10": parseInt(getRightValue(values.sensordatavalues, "P1")),
 								"PM25": parseInt(getRightValue(values.sensordatavalues, "P2"))
@@ -186,7 +193,7 @@ let api = {
 							return (api.checkValues(values.data.Official_AQI_US, "Official_AQI_US"));
 						})
 						.value();
-					return Promise.resolve({cells: cells, timestamp: timestamp_data});
+					return Promise.resolve({cells: cells, timestamp: timestamp_data, timestamp_from: timestamp_from});
 				} else if (num === 3) {
 					let cells = _.chain(json)
 						.filter((sensor) =>
@@ -194,7 +201,10 @@ let api = {
 							&& api.thp_sensors[sensor.sensor.sensor_type.name]
 						)
 						.map((values) => {
-							if (values.timestamp > timestamp_data) timestamp_data = values.timestamp;
+							if (values.timestamp > timestamp_data) {
+								timestamp_data = values.timestamp;
+								timestamp_from = "data.temp.min";
+							}
 							return {
 								"data": {
 									"Pressure": parseInt(getRightValue(values.sensordatavalues, "pressure_at_sealevel")) / 100,
@@ -208,7 +218,7 @@ let api = {
 							}
 						})
 						.value();
-					return Promise.resolve({cells: cells, timestamp: timestamp_data});
+					return Promise.resolve({cells: cells, timestamp: timestamp_data, timestamp_from: timestamp_from});
 				} else if (num === 4) {
 					let cells = _.chain(json)
 						.filter((sensor) =>
@@ -216,7 +226,10 @@ let api = {
 							&& api.noise_sensors[sensor.sensor.sensor_type.name]
 						)
 						.map((values) => {
-							if (values.timestamp > timestamp_data) timestamp_data = values.timestamp;
+							if (values.timestamp > timestamp_data) {
+								timestamp_data = values.timestamp;
+								timestamp_from = "data.noise";
+							}
 							return {
 								"data": {
 									"Noise": parseInt(getRightValue(values.sensordatavalues, "noise_LAeq")),
@@ -228,7 +241,7 @@ let api = {
 							}
 						})
 						.value();
-					return Promise.resolve({cells: cells, timestamp: timestamp_data});
+					return Promise.resolve({cells: cells, timestamp: timestamp_data, timestamp_from: timestamp_from});
 				}
 			}).catch(function (error) {
 				// If there is any error you will catch them here

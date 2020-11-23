@@ -37,7 +37,8 @@ let hexagonheatmap, hmhexaPM_aktuell, hmhexaPM_AQI, hmhexa_t_h_p, hmhexa_noise;
 const lang = translate.getFirstBrowserLanguage().substring(0, 2);
 
 let openedGraph1 = [];
-let timestamp_data = '';			// needs to be global to work over all 3 data streams
+let timestamp_data = '';			// needs to be global to work over all 4 data streams
+let timestamp_from = '';			// needs to be global to work over all 4 data streams
 let clicked = null;
 
 const locale = timeFormatLocale({
@@ -123,6 +124,7 @@ const query = {
 	nooverlay: "false",
 	nowind: "false",
 	nolabs: "false",
+	noeustations: "false",
 	selection: config.selection
 };
 // iife function to read query parameter and fill query object
@@ -136,9 +138,10 @@ const query = {
 	}
 })();
 
-// wind layer
+// layers
 if (query.nowind === "false") { config.layer_wind = 1 } else {config.layer_wind = 0;}
 if (query.nolabs === "false") { config.layer_labs = 1 } else {config.layer_labs = 0;}
+if (query.noeustations === "false") { config.layer_eustations = 1 } else {config.layer_eustations = 0;}
 
 // show betterplace overlay
 if (query.nooverlay === "false") d3.select("#betterplace").style("display", "inline-block");
@@ -439,21 +442,33 @@ The values are refreshed every 5 minutes in order to fit with the measurement fr
 	function retrieveData() {
 		api.getData(data_host + "/data/v2/data.dust.min.json", 1).then(function (result) {
 			hmhexaPM_aktuell = result.cells;
-			if (result.timestamp > timestamp_data) timestamp_data = result.timestamp;
+			if (result.timestamp > timestamp_data) {
+				timestamp_data = result.timestamp;
+				timestamp_from = result.timestamp_from;
+			}
 			ready(1);
 			api.getData(data_host + "/data/v2/data.24h.json", 2).then(function (result) {
 				hmhexaPM_AQI = result.cells;
-				if (result.timestamp > timestamp_data) timestamp_data = result.timestamp;
+				if (result.timestamp > timestamp_data) {
+					timestamp_data = result.timestamp;
+					timestamp_from = result.timestamp_from;
+				}
 				ready(2);
 			});
 			api.getData(data_host + "/data/v2/data.temp.min.json", 3).then(function (result) {
 				hmhexa_t_h_p = result.cells;
-				if (result.timestamp > timestamp_data) timestamp_data = result.timestamp;
+				if (result.timestamp > timestamp_data) {
+					timestamp_data = result.timestamp;
+					timestamp_from = result.timestamp_from;
+				}
 				ready(3);
 			});
 			api.getData(data_host + "/data/v1/data.noise.json", 4).then(function (result) {
 				hmhexa_noise = result.cells;
-				if (result.timestamp > timestamp_data) timestamp_data = result.timestamp;
+				if (result.timestamp > timestamp_data) {
+					timestamp_data = result.timestamp;
+					timestamp_from = result.timestamp_from;
+				}
 				ready(4);
 			});
 		});
@@ -601,6 +616,7 @@ function ready(num) {
 	const dateFormater = locale.format("%H:%M:%S");
 
 	d3.select("#update").html(translate.tr(lang, "Last update") + ": " + dateFormater(newTime));
+	console.log("Timestamp " + timestamp_data + " from " + timestamp_from);
 
 	if (num === 1 && (user_selected_value === "PM10" || user_selected_value === "PM25")) {
 		hexagonheatmap.initialize(scale_options[user_selected_value]);
