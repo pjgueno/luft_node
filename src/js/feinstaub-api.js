@@ -28,6 +28,7 @@ let api = {
 		"SHT30": true,
 		"SHT31": true,
 		"SHT35": true,
+		"SHT85": true,
 	},
 	
 	noise_sensors: {
