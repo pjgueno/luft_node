@@ -71,10 +71,12 @@ module.exports = {
 
 // layer options
 	"Local labs": {
-		de: "Lokale Labs"
+		"de": "Lokale Labs",
+		"ru": "Местные сообщества"
 	},
 	"Wind layer": {
-		de: "Wind Layer"
+		"de": "Wind Layer",
+		"ru": "Ветер"
 	},
 
 // sidebar
