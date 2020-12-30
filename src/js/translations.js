@@ -83,10 +83,12 @@ module.exports = {
   // layer options
   'Local labs': {
     de: 'Lokale Labs',
+		ru: 'Местные сообщества'
     it: 'Laboratori locali',
   },
   'Wind layer': {
     de: 'Wind Layer',
+		ru: 'Ветер'
     it: 'Strato del vento',
   },
 
