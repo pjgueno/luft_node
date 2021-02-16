@@ -760,7 +760,10 @@ function showAllSelect() {
 			custom_select.select("#select-item-Noise").select("span").attr("id","noise_option");
 		});
 		custom_select.select(".select-selected").attr("class", "select-selected select-arrow-active");
-	}
+	}else{
+        custom_select.select(".select-items").remove();
+        custom_select.select(".select-selected").attr("class", "select-selected select-arrow-inactive"); 
+    }	
 }
 
 function switchTo(element) {
