@@ -441,6 +441,10 @@ module.exports = {
 	"tanzania": [-6.307, 34.854],
 	"dar-es-salaam": [-6.8, 39.283333],
 
+//	Uganda
+	"uganda": [1.067, 31.883],
+	"kampala": [0.291, 32.599],
+
 //	South Africa
 	"south-africa": [-28.65, 25],
 	"pretoria": [-25.746, 28.188],

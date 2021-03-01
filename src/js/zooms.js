@@ -161,6 +161,10 @@ module.exports = {
 //	Tanzania
 	"tanzania": 6,
 
+//	Uganda
+	"uganda": 7,
+	"kampala": 12,
+	
 //	South Africa
 	"south-africa": 6,
 
