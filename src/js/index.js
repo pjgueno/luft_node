@@ -10,7 +10,6 @@ import * as d3_Transition from "d3-transition";
 import {scaleLinear} from 'd3-scale';
 import {geoPath, geoTransform} from 'd3-geo';
 import {timeMinute} from 'd3-time';
-import {interval, timeout} from 'd3-timer';
 import {timeFormatLocale, timeParse} from 'd3-time-format';
 import {median} from 'd3-array';
 
@@ -19,6 +18,8 @@ import 'whatwg-fetch';
 const d3 = Object.assign({}, d3_Selection, d3_Hexbin);
 
 import api from './feinstaub-api';
+import labs from './labs.js';
+import wind from './wind.js';
 import * as config from './config.js';
 
 import '../css/style.css';
@@ -36,7 +37,9 @@ let hexagonheatmap, hmhexaPM_aktuell, hmhexaPM_AQI, hmhexa_t_h_p, hmhexa_noise;
 const lang = translate.getFirstBrowserLanguage().substring(0, 2);
 
 let openedGraph1 = [];
-let timestamp_data = '';			// needs to be global to work over all 3 data streams
+let timestamp_data = '';			// needs to be global to work over all 4 data streams
+let timestamp_from = '';			// needs to be global to work over all 4 data streams
+let clicked = null;
 
 const locale = timeFormatLocale({
 	"dateTime": "%Y.%m.%d %H:%M:%S",
@@ -103,27 +106,25 @@ const div = d3.select("#sidebar").append("div").attr("id", "table").style("displ
 
 const map = L.map('map', {zoomControl: true, minZoom: config.minZoom, maxZoom: config.maxZoom, doubleClickZoom: false});
 
+var data_host = "";
+data_host = "https://maps.sensor.community";
+config.tiles = config.tiles_server + config.tiles_path;
+
 const tiles = L.tileLayer(config.tiles, {
 	attribution: config.attribution,
 	maxZoom: config.maxZoom,
-	minZoom: config.minZoom
+	minZoom: config.minZoom,
+	subdomains: config.tiles_subdomains
 }).addTo(map);
-
-var labelBaseOptions = {
-	iconUrl: 'images/lab_marker.svg',
-	shadowUrl: null,
-	iconSize: new L.Point(21, 35),
-	iconAnchor: new L.Point(10, 34),
-	labelAnchor: new L.Point(25, 2),
-	wrapperAnchor: new L.Point(10, 35),
-	popupAnchor:  [-0, -35]
-};
 
 new L.Hash(map);
 
 // define query object
 const query = {
 	nooverlay: "false",
+	nowind: "false",
+	nolabs: "false",
+	noeustations: "false",
 	selection: config.selection
 };
 // iife function to read query parameter and fill query object
@@ -131,16 +132,21 @@ const query = {
 	let telem;
 	const search_values = location.search.replace('\?', '').split('&');
 	for (let i = 0; i < search_values.length; i++) {
-		console.log(search_values[i]);
 		telem = search_values[i].split('=');
-		console.log(telem);
 		query[telem[0]] = '';
 		if (typeof telem[1] != 'undefined') query[telem[0]] = telem[1];
 	}
 })();
 
+// layers
+if (query.nowind === "false") { config.layer_wind = 1 } else {config.layer_wind = 0;}
+if (query.nolabs === "false") { config.layer_labs = 1 } else {config.layer_labs = 0;}
+if (query.noeustations === "false") { config.layer_eustations = 1 } else {config.layer_eustations = 0;}
+
 // show betterplace overlay
 if (query.nooverlay === "false") d3.select("#betterplace").style("display", "inline-block");
+
+d3.select("#loading").html(translate.tr(lang,d3.select("#loading").html()));
 
 config.selection = (query.sensor !== undefined) ? query.sensor : config.selection;
 d3.select("#custom-select").select("select").property("value", config.selection);
@@ -157,19 +163,15 @@ if (location.hash) {
 	const hostname_parts = location.hostname.split(".");
 	if (hostname_parts.length === 4) {
 		const place = hostname_parts[0].toLowerCase();
-		console.log(place);
 		if (typeof places[place] !== 'undefined' && places[place] !== null) {
 			coordsCenter = places[place];
 			zoomLevel = 11;
 		}
 		if (typeof zooms[place] !== 'undefined' && zooms[place] !== null) zoomLevel = zooms[place];
-		console.log("Center: " + coordsCenter);
-		console.log("Zoom: " + zoomLevel);
 	}
 }
 
 window.onload = function () {
-	//	HEXBINS
 	L.HexbinLayer = L.Layer.extend({
 		_undef(a) {
 			return typeof a === 'undefined';
@@ -180,12 +182,14 @@ window.onload = function () {
 			duration: 200,
 			onmouseover: undefined,
 			onmouseout: undefined,
+			
+			attribution: "<br/><span style='font-size:120%'>Measurements: <a href='https://sensor.community/' style='color: red'>Sensor.Community</a> contributors</span>",
 
-			/*	REVOIR LE DOUBLECLIQUE*/
-			click: function (e) {
-				timeout(function () {
-					if (map.clicked === 1) sensorNr(e);
-				}, 300);
+			click: function (d) {
+				setTimeout(function () {
+					if (clicked === null) sensorNr(d);
+					clicked += 1;
+				}, 500)
 			},
 
 			lng: function (d) {
@@ -208,7 +212,6 @@ window.onload = function () {
 
 		// Make hex radius dynamic for different zoom levels to give a nicer overview of the sensors as well as making sure that the hex grid does not cover the whole world when zooming out
 		getFlexRadius() {
-			console.log(user_selected_value);
 			if (this.map.getZoom() < 3) {
 				return this.options.radius / (3 * (4 - this.map.getZoom()));
 			} else if (this.map.getZoom() > 2 && this.map.getZoom() < 8) {
@@ -405,8 +408,8 @@ window.onload = function () {
 <p>By clicking on a hexagon, you can display a list of all the corresponding sensors as a table. The first column lists the sensor-IDs. In the first line, you can see the amount of sensor in the area and the median value.</p> \
 <p>By clicking on the plus symbol next to a sensor ID, you can display two graphics: the individual measurements for the last 24 hours and the 24 hours floating mean for the last seven days. For technical reasons, the first of the 8 days displayed on the graphic has to stay empty.\
 The values are refreshed every 5 minutes in order to fit with the measurement frequency of the Airrohr sensors.</p> \
-<p>The Air Quality Index (AQI) is calculated according to the recommandations of the United States Environmental Protection Agency. Further information is available on the official page.(<a href='https://www.airnow.gov/index.cfm?action=aqibasics.aqi'>Link</a>). Hover over the AQI scale to display the levels of health concern.</p>"));
-	d3.select('#betterplace').html("<a title='" + translate.tr(lang, "Donate for Luftdaten.info (Hardware, Software) now on Betterplace.org") + " target='_blank' href='https://www.betterplace.org/de/projects/38071-fur-den-feinstaub-sensor-sds011-als-bastel-kit-spenden/'>" + translate.tr(lang, "Donate for<br/>Luftdaten.info<br/>now on<br/><span>Betterplace.org</span>") + "</a>");
+<p>The Air Quality Index (AQI) is calculated according to the recommandations of the United States Environmental Protection Agency. Further information is available on the official page.(<a href='https://www.airnow.gov/aqi/aqi-basics/'>Link</a>). Hover over the AQI scale to display the levels of health concern.</p>"));
+	d3.select('#betterplace').html("<a title='" + translate.tr(lang, "Donate for Sensor.Community (Hardware, Software) now on Betterplace.org") + " href='https://www.betterplace.org/de/projects/38071-fur-den-feinstaub-sensor-sds011-als-bastel-kit-spenden/' target='_blank' rel='noreferrer'>" + translate.tr(lang, "Donate for<br/>Sensor.Community<br/>now on<br/><span>Betterplace.org</span>") + "</a>");
 
 	d3.select("#menu").on("click", toggleSidebar);
 	d3.select("#explanation").on("click", toggleExplanation);
@@ -439,23 +442,35 @@ The values are refreshed every 5 minutes in order to fit with the measurement fr
 
 //	REVOIR ORDRE DANS FONCTION READY
 	function retrieveData() {
-		api.getData("https://maps.luftdaten.info/data/v2/data.dust.min.json", 1).then(function (result) {
+		api.getData(data_host + "/data/v2/data.dust.min.json", 1).then(function (result) {
 			hmhexaPM_aktuell = result.cells;
-			if (result.timestamp > timestamp_data) timestamp_data = result.timestamp;
+			if (result.timestamp > timestamp_data) {
+				timestamp_data = result.timestamp;
+				timestamp_from = result.timestamp_from;
+			}
 			ready(1);
-			api.getData("https://maps.luftdaten.info/data/v2/data.24h.json", 2).then(function (result) {
+			api.getData(data_host + "/data/v2/data.24h.json", 2).then(function (result) {
 				hmhexaPM_AQI = result.cells;
-				if (result.timestamp > timestamp_data) timestamp_data = result.timestamp;
+				if (result.timestamp > timestamp_data) {
+					timestamp_data = result.timestamp;
+					timestamp_from = result.timestamp_from;
+				}
 				ready(2);
 			});
-			api.getData("https://maps.luftdaten.info/data/v2/data.temp.min.json", 3).then(function (result) {
+			api.getData(data_host + "/data/v2/data.temp.min.json", 3).then(function (result) {
 				hmhexa_t_h_p = result.cells;
-				if (result.timestamp > timestamp_data) timestamp_data = result.timestamp;
+				if (result.timestamp > timestamp_data) {
+					timestamp_data = result.timestamp;
+					timestamp_from = result.timestamp_from;
+				}
 				ready(3);
 			});
-			api.getData("https://maps.luftdaten.info/data/v1/data.noise.json", 4).then(function (result) {
+			api.getData(data_host + "/data/v1/data.noise.json", 4).then(function (result) {
 				hmhexa_noise = result.cells;
-				if (result.timestamp > timestamp_data) timestamp_data = result.timestamp;
+				if (result.timestamp > timestamp_data) {
+					timestamp_data = result.timestamp;
+					timestamp_from = result.timestamp_from;
+				}
 				ready(4);
 			});
 		});
@@ -465,7 +480,7 @@ The values are refreshed every 5 minutes in order to fit with the measurement fr
 	retrieveData();
 
 	// refresh data
-	interval(function () {
+	setInterval(function () {
 		d3.selectAll('path.hexbin-hexagon').remove();
 		retrieveData();
 	}, 300000);
@@ -473,10 +488,6 @@ The values are refreshed every 5 minutes in order to fit with the measurement fr
 	map.on('moveend', function () {
 		hexagonheatmap._zoomChange();
 	});
-	map.on('move', function () {
-	});
-
-//	REVOIR LE DOUBLECLIQUE
 
 	map.on('click', function (e) {
 		/* if the user clicks anywhere outside the opened select drop down, then close all select boxes */
@@ -484,56 +495,71 @@ The values are refreshed every 5 minutes in order to fit with the measurement fr
 			d3.select("#custom-select").select(".select-items").remove();
 			d3.select("#custom-select").select(".select-selected").attr("class", "select-selected");
 		} else {
-			map.clicked = map.clicked + 1;
-			timeout(function () {
-				if (map.clicked === 1) {
-					map.setView([e.latlng.lat, e.latlng.lng], map.getZoom());
-				}
-				map.clicked = 0;
+			setTimeout(function () {
+				map.setView([e.latlng.lat, e.latlng.lng], map.getZoom());
 			}, 300);
 		}
+		clicked = null;
 	});
 	map.on('dblclick', function () {
-		map.clicked = 0;
 		map.zoomIn();
+		clicked += 1;
 	});
-	
-	function checkStatus(response) {
-		if (response.status >= 200 && response.status < 300) {
-			return response
-		} else {
-			var error = new Error(response.statusText)
-			error.response = response
-			throw error
-		}
-	}
- 
-	function parseJSON(response) {
-		return response.json()
-	}
- 
-    var labelRight = L.Icon.extend({
-        options: labelBaseOptions
-    });
 
-	fetch("https://opendata-stuttgart.github.io/luftdaten-local-labs/labs.json")
-	.then(checkStatus)
-	.then(parseJSON)
-	.then(function(data) {
-		for (var i = 0; i < data.length; i++) {
-			var marker = L.marker(
-					[data[i].lat,data[i].lon],
-					{
-						icon: new labelRight({ labelText: "<a href=\"#\"></a>"}),
-						riseOnHover: true
-					}
-				)
-				.bindPopup(data[i].text + "<br /><br />Your location is missing? Add it <a href='https://github.com/opendata-stuttgart/luftdaten-local-labs' target='_blank' rel='noreferrer'>here</a>.")
-				.addTo(map)
-		}
-	}).catch(function(error) {
-			console.log('request failed', error)
-	})
+	// Load lab and windlayer, init checkboxes
+	if (config.layer_labs) {
+		d3.select("#cb_labs").property("checked", true);
+	} else {
+		d3.select("#cb_labs").property("checked", false);
+	}
+	
+	if (config.layer_wind) {
+		d3.select("#cb_wind").property("checked", true);
+	} else {
+		d3.select("#cb_wind").property("checked", false);
+	}
+
+	labs.getData(data_host + "/local-labs/labs.json", map);
+	wind.getData(data_host + "/data/v1/wind.json", map, switchWindLayer);
+	
+	d3.select("#label_local_labs").html(translate.tr(lang, "Local labs"));
+	d3.select("#label_wind_layer").html(translate.tr(lang, "Wind layer"));
+
+	switchLabLayer();
+	switchWindLayer();
+	d3.select("#cb_labs").on("change", switchLabLayer);
+	d3.select("#cb_wind").on("change", switchWindLayer);
+
+} 
+
+function setQueryString() {
+	let stateObj = {};
+	let new_path = window.location.pathname + "?";
+	if (query.nooverlay != "false") new_path += "nooverlay&";
+	if (query.selection != config.selection) new_path += "selection="+query.selection+"&";
+	if (! d3.select("#cb_wind").property("checked")) new_path += "nowind&";
+	if (! d3.select("#cb_labs").property("checked")) new_path += "nolabs&";
+	new_path = new_path.slice(0,-1) + location.hash;
+	console.log(new_path);
+	history.pushState(stateObj,document.title,new_path);
+}
+
+function switchLabLayer() {
+	if (d3.select("#cb_labs").property("checked")) {
+		map.getPane('markerPane').style.visibility = "visible";
+	} else {
+		map.getPane('markerPane').style.visibility = "hidden";
+	}
+	setQueryString();
+}
+
+function switchWindLayer() {
+	if (d3.select("#cb_wind").property("checked")) {
+		d3.selectAll(".velocity-overlay").style("visibility", "visible");
+	} else {
+		d3.selectAll(".velocity-overlay").style("visibility", "hidden");
+	}
+	setQueryString();
 }
 
 function data_median(data) {
@@ -592,6 +618,7 @@ function ready(num) {
 	const dateFormater = locale.format("%H:%M:%S");
 
 	d3.select("#update").html(translate.tr(lang, "Last update") + ": " + dateFormater(newTime));
+	console.log("Timestamp " + timestamp_data + " from " + timestamp_from);
 
 	if (num === 1 && (user_selected_value === "PM10" || user_selected_value === "PM25")) {
 		hexagonheatmap.initialize(scale_options[user_selected_value]);
@@ -611,7 +638,7 @@ function ready(num) {
 		hexagonheatmap.initialize(scale_options[user_selected_value]);
 		hexagonheatmap.data(hmhexa_noise);
 	}
-	d3.select("#loading").style("display", "none");
+	d3.select("#loading_layer").style("display", "none");
 }
 
 function reloadMap(val) {
@@ -644,11 +671,11 @@ function sensorNr(data) {
 
 	let textefin = "<table id='results' style='width:380px;'><tr><th class ='title'>" + translate.tr(lang, 'Sensor') + "</th><th class = 'title'>" + translate.tr(lang, titles[user_selected_value]) + "</th></tr>";
 	if (data.length > 1) {
-		textefin += "<tr><td class='idsens'>Median " + data.length + " Sens.</td><td>" + parseInt(data_median(data)) + "</td></tr>";
+		textefin += "<tr><td class='idsens'>Median " + data.length + " Sens.</td><td>" + (isNaN(parseInt(data_median(data))) ? "-" : parseInt(data_median(data))) + "</td></tr>";
 	}
 	let sensors = '';
 	data.forEach(function (i) {
-		sensors += "<tr><td class='idsens' id='id_" + i.o.id + "'>" + inner_pre + i.o.id + (i.o.indoor? " (indoor)":"") +"</td>";
+		sensors += "<tr><td class='idsens' id='id_" + i.o.id + (i.o.indoor? "_indoor":"") + "'>" + inner_pre + i.o.id + (i.o.indoor? " (indoor)":"") +"</td>";
 		if (user_selected_value === "PM10") {
 			sensors += "<td>" + i.o.data[user_selected_value] + "</td></tr>";
 		}
@@ -688,26 +715,28 @@ function sensorNr(data) {
 function displayGraph(id) {
 
 	let inner_pre = "";
-	const panel_str = "<iframe src='https://maps.luftdaten.info/grafana/d-solo/000000004/single-sensor-view?orgId=1&panelId=<PANELID>&var-node=<SENSOR>' width='290' height='200' frameborder='0'></iframe>";
+	const panel_str = "<iframe src='https://maps.sensor.community/grafana/d-solo/000000004/single-sensor-view?orgId=1&panelId=<PANELID>&var-node=<SENSOR>' width='290' height='200' frameborder='0'></iframe>";
 	const sens = id.substr(3);
+	const sens_id = sens.replace("_indoor", "");
+	const sens_desc = sens.replace("_indoor", " (indoor)");
 
-	if (!openedGraph1.includes(sens)) {
-		openedGraph1.push(sens);
+	if (!openedGraph1.includes(sens_id)) {
+		openedGraph1.push(sens_id);
 
-		const iddiv = "#graph_" + sens;
+		const iddiv = "#graph_" + sens_id;
 
 		d3.select(iddiv).append("td")
-			.attr("id", "frame_" + sens)
+			.attr("id", "frame_" + sens_id)
 			.attr("colspan", "2")
-			.html((panelIDs[user_selected_value][0] > 0 ? panel_str.replace("<PANELID>", panelIDs[user_selected_value][0]).replace("<SENSOR>", sens) + "<br/>":"") + (panelIDs[user_selected_value][1] > 0 ? panel_str.replace("<PANELID>", panelIDs[user_selected_value][1]).replace("<SENSOR>", sens):""));
+			.html((panelIDs[user_selected_value][0] > 0 ? panel_str.replace("<PANELID>", panelIDs[user_selected_value][0]).replace("<SENSOR>", sens_id) + "<br/>":"") + (panelIDs[user_selected_value][1] > 0 ? panel_str.replace("<PANELID>", panelIDs[user_selected_value][1]).replace("<SENSOR>", sens_id):""));
 
 		if (user_selected_value !== "Official_AQI_US") inner_pre = "(-) ";
-		d3.select("#id_" + sens).html(inner_pre + "#" + sens);
+		d3.select("#id_" + sens).html(inner_pre + "#" + sens_desc);
 	} else {
 		if (user_selected_value !== "Official_AQI_US") inner_pre = "(+) ";
-		d3.select("#id_" + sens).html(inner_pre + "#" + sens);
-		d3.select("#frame_" + sens).remove();
-		removeInArray(openedGraph1, sens);
+		d3.select("#id_" + sens).html(inner_pre + "#" + sens_desc);
+		d3.select("#frame_" + sens_id).remove();
+		removeInArray(openedGraph1, sens_id);
 	}
 }
 
@@ -727,14 +756,16 @@ function showAllSelect() {
 	if (custom_select.select(".select-items").empty()) {
 		custom_select.append("div").attr("class", "select-items");
 		custom_select.select("select").selectAll("option").each(function (d) {
-			console.log(d3.select(this).html());
 			if (this.value !== user_selected_value) custom_select.select(".select-items").append("div").html("<span>"+d3.select(this).html()+"</span>").attr("id", "select-item-" + this.value).on("click", function () {
 				switchTo(this);
 			});
 			custom_select.select("#select-item-Noise").select("span").attr("id","noise_option");
 		});
 		custom_select.select(".select-selected").attr("class", "select-selected select-arrow-active");
-	}
+	}else{
+        custom_select.select(".select-items").remove();
+        custom_select.select(".select-selected").attr("class", "select-selected select-arrow-inactive"); 
+    }	
 }
 
 function switchTo(element) {
@@ -742,7 +773,7 @@ function switchTo(element) {
 	custom_select.select("select").property("value", element.id.substring(12));
 	custom_select.select(".select-selected").html("<span>"+custom_select.select("select").select("option:checked").html()+"</span>");
 	user_selected_value = element.id.substring(12);
-	if (user_selected_value == "Noise") {
+	if (user_selected_value === "Noise") {
 		custom_select.select(".select-selected").select("span").attr("id","noise_option");
 	} else {
 		custom_select.select(".select-selected").select("span").attr("id",null);
