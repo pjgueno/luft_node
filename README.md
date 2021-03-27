@@ -73,7 +73,6 @@ valid sensor parameters PM25, PM10, Pressure, Noise, Humidity & Official_AQI_US
 http://127.0.0.1:8080/?sensor=Noise
 
 ### Location 
-
 valid parameters zoom level, lat and long 
 http://127.0.0.1:8080/#9/48.8123/9.2487
 
@@ -81,3 +80,4 @@ http://127.0.0.1:8080/#9/48.8123/9.2487
 
 first start with sensor then location
 http://127.0.0.1:8080/?sensor=Noise#9/48.8123/9.2487
+
