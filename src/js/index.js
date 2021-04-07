@@ -145,7 +145,9 @@ if (query.noeustations === "false") { config.layer_eustations = 1 } else {config
 
 // show betterplace overlay
 if (query.nooverlay === "false") d3.select("#betterplace").style("display", "inline-block");
+
 d3.select("#loading").html(translate.tr(lang,d3.select("#loading").html()));
+
 config.selection = (query.sensor !== undefined) ? query.sensor : config.selection;
 d3.select("#custom-select").select("select").property("value", config.selection);
 
