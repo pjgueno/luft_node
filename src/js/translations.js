@@ -22,7 +22,8 @@ module.exports = {
 		"hu": "Az adatok betöltése folyamatban van ...",
 		"et": "Andmed laaditakse ...",
 		"lv": "Dati tiek ielādēti ...",
-		"lt": "Duomenys įkeliami ..."
+		"lt": "Duomenys įkeliami ...",
+		"uk": "Завантаження даних..."
 	},
 	"(Sensor)": {
 		"de": "Sensor",
@@ -47,7 +48,8 @@ module.exports = {
 		"hu": "Érzékelő",
 		"et": "Andur",
 		"lv": "Sensors",
-		"lt": "Jutiklis"
+		"lt": "Jutiklis",
+		"uk": "Сенсор"
 	},
 	"PM10 &micro;g/m&sup3;": {
 		"de": "PM10 &micro;g/m&sup3;",
@@ -72,7 +74,8 @@ module.exports = {
 		"hu": "PM10 &micro;g/m&sup3;",
 		"et": "PM10 &micro;g/m&sup3;",
 		"lv": "PM10 &micro;g/m&sup3;",
-		"lt": "PM10 &micro;g/m&sup3;"
+		"lt": "PM10 &micro;g/m&sup3;",
+		"uk": "PM10 &micro;g/m&sup3;"
 	},
 	"PM2.5 &micro;g/m&sup3;": {
 		"de": "PM2.5 &micro;g/m&sup3;",
@@ -97,7 +100,8 @@ module.exports = {
 		"hu": "PM2.5 &micro;g/m&sup3;",
 		"et": "PM2.5 &micro;g/m&sup3;",
 		"lv": "PM2.5 &micro;g/m&sup3;",
-		"lt": "PM2.5 &micro;g/m&sup3;"
+		"lt": "PM2.5 &micro;g/m&sup3;",
+		"uk": "PM2.5 &micro;g/m&sup3;"
 	},
 	"AQI US": {
 		"de": "AQI US",
@@ -122,7 +126,8 @@ module.exports = {
 		"hu": "AQI US",
 		"et": "AQI US",
 		"lv": "AQI US",
-		"lt": "AQI US"
+		"lt": "AQI US",
+		"uk": "AQI US"
 	},
 	"Temperature °C": {
 		"de": "Temperatur °C",
@@ -147,7 +152,8 @@ module.exports = {
 		"hu": "Hőmérséklet °C",
 		"et": "Temperatuur °C",
 		"lv": "Temperatūra °C",
-		"lt": "Temperatūra °C"
+		"lt": "Temperatūra °C",
+		"uk": "Температура °C"
 	},
 	"Humidity %": {
 		"de": "Feuchtigkeit %",
@@ -172,7 +178,8 @@ module.exports = {
 		"hu": "Páratartalom %",
 		"et": "Niiskus %",
 		"lv": "Mitrums %",
-		"lt": "Drėgmė %"
+		"lt": "Drėgmė %",
+		"uk": "Вологість %"
 	},
 	"Pressure hPa": {
 		"de": "Luftdruck hPa",
@@ -197,7 +204,8 @@ module.exports = {
 		"hu": "Légnyomás hPa",
 		"et": "Õhurõhk hPa",
 		"lv": "Gaisa spiediens hPa",
-		"lt": "Oro slėgis hPa"
+		"lt": "Oro slėgis hPa",
+		"uk": "Атмосферний тиск hPa"
 	},
 	"Noise dBA": {
 		"de": "Lautstärke dBA",
@@ -222,7 +230,8 @@ module.exports = {
 		"hu": "Hangerő dBA",
 		"et": "Helitugevus dBA",
 		"lv": "Skaļums dBA",
-		"lt": "Tūrio dBA"
+		"lt": "Tūrio dBA",
+		"uk": "Шум dBA"
 	},
 	" Official AQI US": {
 		"de": "Luftqualitäts-Index (US)",
@@ -247,7 +256,8 @@ module.exports = {
 		"hu": "Levegőminőségi index (USA)",
 		"et": "Õhukvaliteedi indeks (USA)",
 		"lv": "Gaisa kvalitātes indekss (ASV)",
-		"lt": "Oficialus AQI JAV"
+		"lt": "Oficialus AQI JAV",
+		"uk": "Рівень забрудненості (AQI)"
 	},
 	" Temperature": {
 		"de": " Temperatur",
@@ -272,7 +282,8 @@ module.exports = {
 		"hu": " Hőmérséklet",
 		"et": " Temperatuur",
 		"lv": " Temperatūra",
-		"lt": " Temperatūra"
+		"lt": " Temperatūra",
+		"uk": " Температура"
 	},
 	" rel. Humidity": {
 		"de": " rel. Luftfeuchte",
@@ -297,7 +308,8 @@ module.exports = {
 		"hu": " rel. Páratartalom",
 		"et": " rel. Niiskus",
 		"lv": " rel. Mitrums",
-		"lt": " rel. Drėgmė"
+		"lt": " rel. Drėgmė",
+		"uk": " Вологість"
 	},
 	" Pressure": {
 		"de": " Luftdruck",
@@ -322,7 +334,8 @@ module.exports = {
 		"hu": " Légnyomás",
 		"et": " Õhurõhk",
 		"lv": " Gaisa spiediens",
-		"lt": " Oro slėgis"
+		"lt": " Oro slėgis",
+		"uk": " Тиск"
 	},
 	" Noise": {
 		"de": " Lautstärke",
@@ -347,7 +360,8 @@ module.exports = {
 		"hu": " Kötet",
 		"et": " Köide",
 		"lv": " Tilpums",
-		"lt": " Tūris"
+		"lt": " Tūris",
+		"uk": " Шум"
 	},
 	"Local labs": {
 		"de": "Lokale Labs",
@@ -372,7 +386,8 @@ module.exports = {
 		"hu": "Helyi laboratóriumok",
 		"et": "Kohalikud laborid",
 		"lv": "Vietējās laboratorijas",
-		"lt": "Vietos laboratorijos"
+		"lt": "Vietos laboratorijos",
+		"uk": "Місцеві спільноти"
 	},
 	"Wind layer": {
 		"de": "Wind Layer",
@@ -397,7 +412,8 @@ module.exports = {
 		"hu": "szélréteg",
 		"et": "tuule kiht",
 		"lv": "vēja slānis",
-		"lt": "vėjo sluoksnis"
+		"lt": "vėjo sluoksnis",
+		"uk": "Вітер"
 	},
 	"Hide explanation": {
 		"de": "Erklärung ausblenden",
@@ -422,7 +438,8 @@ module.exports = {
 		"hu": "Magyarázat elrejtése",
 		"et": "Peida selgitus",
 		"lv": "Paslēpt skaidrojumu",
-		"lt": "Paslėpti paaiškinimą"
+		"lt": "Paslėpti paaiškinimą",
+		"uk": "Приховати пояснення"
 	},
 	"Show explanation": {
 		"de": "Erklärung einblenden",
@@ -447,7 +464,8 @@ module.exports = {
 		"hu": "Mutasd a magyarázatot",
 		"et": "Näita selgitust",
 		"lv": "Rādīt paskaidrojumu",
-		"lt": "Parodyti paaiškinimą"
+		"lt": "Parodyti paaiškinimą",
+		"uk": "Показати пояснення"
 	},
 	"(close)": {
 		"de": "(schließen)",
@@ -472,7 +490,8 @@ module.exports = {
 		"hu": "(bezár)",
 		"et": "(sulgeda)",
 		"lv": "(tuvu)",
-		"lt": "(arti)"
+		"lt": "(arti)",
+		"uk": "(закрити)"
 	},
 	"Last update": {
 		"de": "Letztes Update",
@@ -497,7 +516,8 @@ module.exports = {
 		"hu": "Utolsó frissítés",
 		"et": "Viimane uuendus",
 		"lv": "Pēdējais atjauninājums",
-		"lt": "Paskutinis atnaujinimas"
+		"lt": "Paskutinis atnaujinimas",
+		"uk": "Останнє оновлення"
 	},
 	"<p>The hexagons represent the median of the current values of the sensors which are contained in the area, according to the option selected (PM10, PM2.5, temperature, relative humidity, pressure, AQI). You can refer to the scale on the left side of the map.</p><p>By clicking on a hexagon, you can display a list of all the corresponding sensors as a table. The first column lists the sensor-IDs. In the first line, you can see the amount of sensor in the area and the median value.</p><p>By clicking on the plus symbol next to a sensor ID, you can display two graphics: the individual measurements for the last 24 hours and the 24 hours floating mean for the last seven days. For technical reasons, the first of the 8 days displayed on the graphic has to stay empty. The values are refreshed every 5 minutes in order to fit with the measurement frequency of the Airrohr sensors.</p><p>The Air Quality Index (AQI) is calculated according to the recommandations of the United States Environmental Protection Agency. Further information is available on the official page.(<a href='https://www.airnow.gov/aqi/aqi-basics/'>Link</a>). Hover over the AQI scale to display the levels of health concern.</p>": {
 		"de": "<p>Die Kacheln zeigen aktuell den Durchschnitt der PM10-Werte aller in der Zelle befindlichen Sensoren. Diese werden nach der Skala unten links entsprechend eingefärbt.</p><p>Die Zahlen in der ersten Spalte enthält die Sensor-IDs. Befinden sich mehrere Sensoren in der Kachel, so wird der Durchschnittswerte aller in der Zelle enthaltenen Sensoren berechnet.</p><p><b>Achtung</b>: Wir zeigen auf der Karte die Werte der <b>letzten 5 Minuten</b> an. Die von den jeweiligen Landesbehörden veröffentlichen Werte werden als ein 24-Stunden-Mittelwert angegeben. Dadurch können die Werte deutlich vom 24-Stunden-Mittelwert abweichen.</p><p>Ein Klick auf das Plus vor der Sensor-ID blendet zwei Grafiken ein. Die erste Grafik 'Last 24 hours' zeigt den Tagesverlauf für die letzten 24 Stunden an.  Die zweite Grafik zeigt den '24 h floating average' (den gleitenden 24-Stunden-Mittelwert) der letzten 7 Tage.</p>",
@@ -522,7 +542,8 @@ module.exports = {
 		"hu": "<p>A lapok jelenleg a cellában található összes érzékelő PM10-értékének átlagát mutatják. Ezek színezése a bal alsó sarokban található skála szerint történik.<p><p>Az első oszlopban lévő számok az érzékelő azonosítóit tartalmazzák. Ha több érzékelő van a csempében, akkor a cellában található összes érzékelő átlagértékét számoljuk ki.<p><p><b>Vigyázat<b>: A térképen az <b>legutóbbi 5 perc<b> értékeit jelenítjük meg. Az érintett állami hatóságok által közzétett értékek 24 órás átlagot jelentenek. Ennek eredményeképpen az értékek jelentősen eltérhetnek a 24 órás átlagtól.<p><p>Az érzékelő azonosítója előtti pluszra kattintva két grafikon jelenik meg. Az első, \"Az elmúlt 24 óra\" című grafikon az elmúlt 24 óra napi előzményeit mutatja.  A második grafikon az elmúlt 7 nap 24 órás mozgó átlagát mutatja.",
 		"et": "<p>Plaadid näitavad praegu kõigi lahtris asuvate andurite PM10-väärtuste keskmist. Need on vastavalt värvitud vastavalt vasakus allosas olevale skaalale.<p><p>Esimeses veerus olevad numbrid sisaldavad anduri ID-d. Kui plaadil on mitu andurit, arvutatakse kõigi lahtris sisalduvate andurite keskmine väärtus.<p><p><b>Ohutus<b>: Näitame kaardil <b>viimase 5 minuti<b> väärtusi. Vastavate riigiasutuste avaldatud väärtused on esitatud 24 tunni keskmisena. Selle tulemusena võivad väärtused erineda märkimisväärselt 24 tunni keskmisest.<p><p>Klikkides plussil anduri ID ees, kuvatakse kaks graafikut. Esimene graafik \"Viimased 24 tundi\" näitab viimase 24 tunni päevast ajalugu.  Teine graafik näitab 24 tunni libisevat keskmist viimase 7 päeva jooksul.",
 		"lv": "<p>Šobrīd flīzēs ir redzamas visu šūnā izvietoto sensoru vidējās PM10 vērtības. Tie ir attiecīgi iekrāsoti atbilstoši skalai kreisajā apakšējā stūrī.<p><p>Šķēlēs pirmajā slejā ir sensoru ID. Ja plāksnē ir vairāki sensori, tiek aprēķināta visu šūnā esošo sensoru vidējā vērtība.<p><p><b>Uzzmanība<b>: kartē tiek parādītas <b>pēdējo 5 minūšu vērtības<b>. Attiecīgo valsts iestāžu publicētās vērtības ir norādītas kā 24 stundu vidējā vērtība. Rezultātā vērtības var ievērojami atšķirties no 24 stundu vidējās vērtības.<p><p>Noklikšķinot uz plusa sensora ID priekšā, tiks parādīti divi grafiki. Pirmajā grafikā \"Pēdējās 24 stundas\" parādīta pēdējo 24 stundu dienas vēsture.  Otrajā grafikā parādīts \"24 stundu peldošais vidējais rādītājs\" par pēdējām 7 dienām.",
-		"lt": "<p>Šiuo metu plytelėse rodomas visų ląstelėje esančių jutiklių KD10 verčių vidurkis. Jie atitinkamai nuspalvinti pagal kairėje apačioje esančią skalę.<p><p>Pirmame stulpelyje esantys skaičiai nurodo jutiklio ID. Jei plytelėje yra keli jutikliai, apskaičiuojama visų ląstelėje esančių jutiklių vidutinė vertė.<p><p><b>Atsargiai<b>: Žemėlapyje rodome <b>paskutinių 5 minučių<b> vertes. Atitinkamų valstybinių institucijų paskelbtos vertės pateikiamos kaip 24 valandų vidurkis. Todėl vertės gali gerokai skirtis nuo 24 valandų vidurkio.<p><p>Paspaudus pliusą priešais jutiklio ID, bus rodomos dvi diagramos. Pirmoje diagramoje \"Paskutinės 24 valandos\" rodoma pastarųjų 24 valandų dienos istorija.  Antroje diagramoje rodomas pastarųjų 7 dienų \"24 val. plaukiojantis vidurkis\"."
+		"lt": "<p>Šiuo metu plytelėse rodomas visų ląstelėje esančių jutiklių KD10 verčių vidurkis. Jie atitinkamai nuspalvinti pagal kairėje apačioje esančią skalę.<p><p>Pirmame stulpelyje esantys skaičiai nurodo jutiklio ID. Jei plytelėje yra keli jutikliai, apskaičiuojama visų ląstelėje esančių jutiklių vidutinė vertė.<p><p><b>Atsargiai<b>: Žemėlapyje rodome <b>paskutinių 5 minučių<b> vertes. Atitinkamų valstybinių institucijų paskelbtos vertės pateikiamos kaip 24 valandų vidurkis. Todėl vertės gali gerokai skirtis nuo 24 valandų vidurkio.<p><p>Paspaudus pliusą priešais jutiklio ID, bus rodomos dvi diagramos. Pirmoje diagramoje \"Paskutinės 24 valandos\" rodoma pastarųjų 24 valandų dienos istorija.  Antroje diagramoje rodomas pastarųjų 7 dienų \"24 val. plaukiojantis vidurkis\".",
+		"uk": "<p>Шестикутники відображають медіану поточних значень сенсорів, які містяться в області, вибраній згідно опції(PM2.5, PM10, температура, відносна вологість, тиск, рівень AQI та інше). Рівень значень розташовується у лівому куті карти.</p><p>Натиснувши на шестикутник, вам буде відображено значення усіх вибраних сенсорів. У першому стовпці перераховано ідентифікатори сенсорів. В першому рядку відображається кількість сенсорів в поточні області, а також їх середнє значення.</p><p>Натиснувши на символ «плюс» поруч із ідентифікатором сенсора, вам буде відображено два графіки: на першому відображено рівень забрудненості повітря за останню добу(PM2.5 та PM10), на другому - забрудненість повітря за останній тиждень(PM2.5 та PM10). Через технічні причини перший із 8 днів, які відображаються на графіку, має залишатись пустим. Оновлення значень відбувається кожні 5 хвилин, що відповідає частоті зчитувань сенсорів.</p><p>Індекс якості повітря(AQI) розраховується у відповідності із рекомендаціями управління з охорони довкілля США. Додаткову інформацію ви можете отримати перейшовши за посиланням: <a href='https://www.airnow.gov/aqi/aqi-basics/'>USEPA</a>). Наведіть курсор на рівень AQI, щоб відобразити детальну інформацію про кожен ступінь забруднення.</p>"
 	},
 	"Good<div class='tooltip-div'>Air quality is considered satisfactory, and air pollution poses little or no risk.</div>": {
 		"de": "Gut<div class='tooltip-div'>Die Qualität der Luft ist zufriedenstellend. Die Luftverschmutzung stellt ein geringes oder kein Risiko dar.</div>",
@@ -547,7 +568,8 @@ module.exports = {
 		"hu": "Jó<div class='tooltip-div'>A levegő minősége kielégítő. A légszennyezés nem vagy csak kis mértékben jelent kockázatot.<div>",
 		"et": "Hea<div class='tooltip-div'>Ahu kvaliteet on rahuldav. Õhusaaste kujutab endast vähe või üldse mitte mingit ohtu.<div>",
 		"lv": "Labi<div class='tooltip-div'>Aisa kvalitāte ir apmierinoša. Gaisa piesārņojums rada nelielu risku vai nerada nekādu risku.<div>",
-		"lt": "Geras<div class='tooltip-div'>Oro kokybė yra patenkinama. Oro tarša kelia nedidelį pavojų arba nekelia jokio pavojaus.<div>"
+		"lt": "Geras<div class='tooltip-div'>Oro kokybė yra patenkinama. Oro tarša kelia nedidelį pavojų arba nekelia jokio pavojaus.<div>",
+		"uk": "Хороший<div class='tooltip-div'>Якість повітря чудова. Ступінь забрудненості не несе загрози здоров'ю.</div>"
 	},
 	"Moderate<div class='tooltip-div'>Air quality is acceptable; however, for some pollutants there may be a moderate health concern for a very small number of people who are unusually sensitive to air pollution.</div>": {
 		"de": "Mäßig<div class='tooltip-div'>Die Luftqualität ist insgesamt akzeptabel. Bei manchen Schadstoffen bestehen jedoch für einen sehr kleinen Personenkreis, der außergewöhnlich empfindlich auf Luftverschmutzung reagiert, eventuell Gesundheitsbedenken.</div>",
@@ -572,7 +594,8 @@ module.exports = {
 		"hu": "Mérsékelt<div class='tooltip-div'>A levegő minősége összességében elfogadható. Néhány szennyező anyag esetében azonban az emberek egy nagyon kis csoportja, akik kivételesen érzékenyek a légszennyezésre, egészségügyi szempontból aggályos lehet.<div>",
 		"et": "Mõõdukas<div class='tooltip-div'>Lõhk on üldiselt vastuvõetav. Mõnede saasteainete puhul võib siiski olla terviseprobleeme väga väikese rühma inimeste puhul, kes on õhusaaste suhtes erakordselt tundlikud.<div>",
 		"lv": "Vidēja<div class='tooltip-div'>Kopumā gaisa kvalitāte ir pieņemama. Tomēr dažas piesārņojošās vielas var radīt bažas par veselību ļoti nelielai cilvēku grupai, kas ir īpaši jutīga pret gaisa piesārņojumu.<div>.",
-		"lt": "Vidutinė<div class='tooltip-div'>Bendra oro kokybė yra priimtina. Tačiau dėl kai kurių teršalų gali kilti susirūpinimas labai nedidelės žmonių grupės, kuri yra itin jautri oro taršai, sveikata.<div>"
+		"lt": "Vidutinė<div class='tooltip-div'>Bendra oro kokybė yra priimtina. Tačiau dėl kai kurių teršalų gali kilti susirūpinimas labai nedidelės žmonių grupės, kuri yra itin jautri oro taršai, sveikata.<div>",
+		"uk": "Помірний<div class='tooltip-div'>Якість повітря задовільна. Окремі забруднювачі повітря несуть помірну загрозу для невеликої групи людей.</div>"
 	},
 	"Unhealthy for Sensitive Groups<div class='tooltip-div'>Members of sensitive groups may experience health effects. The general public is not likely to be affected.</div>": {
 		"de": "Ungesund für empfindliche Personen<div class='tooltip-div'>Bei empfindlichen Personengruppen können gesundheitliche Auswirkungen auftreten. Die allgemeine Öffentlichkeit ist höchstwahrscheinlich nicht betroffen.</div>",
@@ -597,7 +620,8 @@ module.exports = {
 		"hu": "Egészségtelen az érzékeny egyének számára<div class='tooltip-div'>Az emberek érzékeny csoportjainál egészségügyi hatások jelentkezhetnek. A nagyközönség valószínűleg nem érintett.<div>",
 		"et": "Ebatervislik tundlikele inimestele<div class='tooltip-div'>Tundlikel inimrühmadel võib tekkida mõju tervisele. Üldsust see tõenäoliselt ei mõjuta.<div>",
 		"lv": "Neveselīgs jutīgiem cilvēkiem<div class='tooltip-div'>Jutīgām cilvēku grupām var rasties ietekme uz veselību. Plašo sabiedrību tas, visticamāk, neietekmē.<div>",
-		"lt": "Nesveika jautriems asmenims<div class='tooltip-div'>Jutrios žmonių grupės gali patirti poveikį sveikatai. Plačioji visuomenė greičiausiai nebus paveikta.<div>"
+		"lt": "Nesveika jautriems asmenims<div class='tooltip-div'>Jutrios žmonių grupės gali patirti poveikį sveikatai. Plačioji visuomenė greičiausiai nebus paveikta.<div>",
+		"uk": "Поганий для чутливих груп населення<div class='tooltip-div'>Чутливі групи населення можуть відчувати негативний вплив на здоров'я. Для решти цей вплив не буде суттєво помітним.</div>"
 	},
 	"Unhealthy<div class='tooltip-div'>Everyone may begin to experience health effects; members of sensitive groups may experience more serious health effects.</div>": {
 		"de": "Ungesund<div class='tooltip-div'>Erste gesundheitliche Auswirkungen können sich bei allen Personengruppen einstellen. Bei empfindlichen Personengruppen können ernstere gesundheitliche Auswirkungen auftreten.</div>",
@@ -622,7 +646,8 @@ module.exports = {
 		"hu": "Egészségtelen<div class='tooltip-div'>Az első egészségügyi hatások az emberek minden csoportjánál előfordulhatnak. Az érzékeny csoportokban súlyosabb egészségügyi hatások léphetnek fel.<div>",
 		"et": "Ebatervislik<div class='tooltip-div'>Esimesed võivad kõikides inimrühmades esineda tervisemõjusid. Tõsisemad tervisemõjud võivad ilmneda tundlikes inimrühmades.<div>",
 		"lv": "Neveselīgs<div class='tooltip-div'>Pirmā ietekme uz veselību var rasties visām cilvēku grupām. Jutīgām cilvēku grupām var rasties nopietnāka ietekme uz veselību.<div>",
-		"lt": "Nesveikas<div class='tooltip-div'>Pirmasis poveikis sveikatai gali pasireikšti visoms žmonių grupėms. Jautrioms žmonių grupėms gali pasireikšti rimtesnis poveikis sveikatai.<div>"
+		"lt": "Nesveikas<div class='tooltip-div'>Pirmasis poveikis sveikatai gali pasireikšti visoms žmonių grupėms. Jautrioms žmonių grupėms gali pasireikšti rimtesnis poveikis sveikatai.<div>",
+		"uk": "Нездоровий<div class='tooltip-div'>Всі групи людей можуть почати відчувати негативний вплив на здоров'я. Найбільш чутливі групи людей можуть відчувати більш серйозний вплив на здоров'я.</div>"
 	},
 	"Very Unhealthy<div class='tooltip-div'>Health alert: everyone may experience more serious health effects.</div>": {
 		"de": "Sehr ungesund<div class='tooltip-div'>Gesundheitswarnung aufgrund einer Notfallsituation. Die gesamte Bevölkerung ist voraussichtlich betroffen.</div>",
@@ -647,7 +672,8 @@ module.exports = {
 		"hu": "Nagyon egészségtelen<div class='tooltip-div'>Egészségügyi figyelmeztetés: mindenkinél súlyosabb egészségügyi hatások jelentkezhetnek.</div>",
 		"et": "Väga ebatervislik<div class='tooltip-div'>Tervisealane hoiatus hädaolukorra tõttu. Eeldatavasti on mõjutatud kogu elanikkond.<div>",
 		"lv": "Ļoti neveselīgs<div class='tooltip-div'>Brīdinājums par veselības stāvokli ārkārtas situācijas dēļ. Paredzams, ka tas skars visus iedzīvotājus.<div>",
-		"lt": "Labai nesveikas<div class='tooltip-div'>Įspėjimas apie pavojų sveikatai dėl kritinės situacijos. Tikimasi, kad tai paveiks visus gyventojus.<div>"
+		"lt": "Labai nesveikas<div class='tooltip-div'>Įspėjimas apie pavojų sveikatai dėl kritinės situacijos. Tikimasi, kad tai paveiks visus gyventojus.<div>",
+		"uk": "Дуже нездоровий<div class='tooltip-div'>Сигнал тривоги: всі групи людей можуть відчувати серйозний негативний вплив на здоров'я.</div>"
 	},
 	"Hazardous<div class='tooltip-div'>Health warnings of emergency conditions. The entire population is more likely to be affected.</div>": {
 		"de": "Gefährlich<div class='tooltip-div'>Gesundheitsalarm: Jeder könnte ernstere Auswirkungen auf die Gesundheit verspüren</div>",
@@ -672,7 +698,8 @@ module.exports = {
 		"hu": "Veszélyes<div class='tooltip-div'>Egészségügyi figyelmeztetés: Bárki érezhet súlyosabb egészségügyi hatásokat<div>",
 		"et": "Ohtlik<div class='tooltip-div'>Tervisehoiatus: Igaüks võib tunda tõsisemat mõju tervisele<div>",
 		"lv": "Bīstams<div class='tooltip-div'>Brīdinājums veselībai: ikviens var izjust nopietnāku ietekmi uz veselību<div>",
-		"lt": "Pavojinga<div class='tooltip-div'>Įspėjimas apie pavojų sveikatai: kiekvienas gali pajusti rimtesnį poveikį sveikatai<div>"
+		"lt": "Pavojinga<div class='tooltip-div'>Įspėjimas apie pavojų sveikatai: kiekvienas gali pajusti rimtesnį poveikį sveikatai<div>",
+		"uk": "Небезпечний<div class='tooltip-div'>Попередження про шкоду для здоров'я. Вірогідно, забрудненість повітря несе загрозу для усіх груп населення.</div>"
 	},
 	"Donate for Sensor.Community (Hardware, Software) now on Betterplace.org": {
 		"de": "Jetzt spenden für 'Sensor.Community' (Hardware, Software) auf betterplace.org!",
@@ -697,7 +724,8 @@ module.exports = {
 		"hu": "Adományozzon most a 'Sensor.Community' (Hardver, szoftver) számára a betterplace.org oldalon!",
 		"et": "Annetada nüüd 'Sensor.Community' (riistvara, tarkvara) kohta betterplace.org!",
 		"lv": "Ziedot tagad \"Sensor.Community\" (aparatūra, programmatūra) vietnē betterplace.org!",
-		"lt": "Paaukokite dabar \"Sensor.Community\" (aparatinė ir programinė įranga) svetainėje betterplace.org!"
+		"lt": "Paaukokite dabar \"Sensor.Community\" (aparatinė ir programinė įranga) svetainėje betterplace.org!",
+		"uk": "Підтримайте проєкт 'Sensor.Community' (Hardware, Software) на сервісі betterplace.org!"
 	},
 	"Donate for<br/>Sensor.Community<br/>now on<br/><span>Betterplace.org</span>": {
 		"de": "Jetzt für<br/>Sensor.Community<br/>spenden auf<br/><span>Betterplace.org</span>",
@@ -722,6 +750,7 @@ module.exports = {
 		"hu": "Adományozzon most a<br>Sensor.Community<br> számára a<br><span>Betterplace.org<span> oldalon.",
 		"et": "Annetage nüüd<br>Sensor.Community<br> veebilehel<br><span>Betterplace.org<span>.",
 		"lv": "Ziedojiet tagad<br>Sensor.Community<br> vietnē<br><span>Betterplace.org<span>.",
-		"lt": "Paaukokite dabar<br>Sensor.Community<br> svetainėje<br><span>Betterplace.org<span>."
+		"lt": "Paaukokite dabar<br>Sensor.Community<br> svetainėje<br><span>Betterplace.org<span>.",
+		"uk": "Підтримайте проєкт<br/>Sensor.Community<br/>на<br/><br/><span>Betterplace.org</span>."
 	}
 }
